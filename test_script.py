@@ -11,7 +11,7 @@ def subdomains(url):
     #pattern2 is a regex to find the protocol of the URL
     pattern2 = r"https?"
     #pattern3 is a regex to find the links inside the HTML code
-    pattern3= r"<a[^>]+href=[\"|\']([^\"\']+)[\"|\'][^>]*>"
+    pattern3= r"<a[^>]+href=[\"\']([^\"\']+)[\"\'][^>]*>"
     #pattern4 is a regex to find the domain of the URL that starts with www.
     pattern4= r"^https?\:\/\/www\.([A-Za-z0-9\-]+(?:\.[a-zA-Z]{2,}){1,})$"
     domain = re.findall(pattern1, url)[0]
@@ -24,7 +24,8 @@ def subdomains(url):
     test_subdomains = content.splitlines()
 
     #Cleaning the string by removing everything not alphanumerical such as white spaces and special characters
-    test_subdomains= [re.sub(r'[^A-Za-z0-9.-_]', '', subdomain) for subdomain in test_subdomains]
+    test_subdomains= [re.sub(r'[^A-Za-z0-9.-_]', '', s) for s in test_subdomains]
+    test_subdomains= [re.sub(r'\s+', '', s) for s in test_subdomains]
 
     valid_subdomains=[]
     valid_links=[]
@@ -52,10 +53,12 @@ def subdomains(url):
                 #Loop to test all the links inside the HTML code
                 for l in test_links:
                     if l.startswith("http"):
-                        req= requests.get(l)
-                        if req.status_code>=200 and req.status_code<=299:
+                        req2= requests.get(l)
+                        if req2.status_code>=200 and req2.status_code<=299:
                             #If the link is valid add it to the valid links array
                             valid_links.append(l)
+            else:
+                print("Subdomain not found. ", test_url)
         except Exception as e:
             print("Subdomain not found. ", test_url)
 
@@ -73,14 +76,15 @@ def subdomains(url):
 def directories_files(url):
 
     #pattern3 is a regex to find the links inside the HTML code
-    pattern3= r"<a[^>]+href=[\"|\']([^\"\']+)[\"|\'][^>]*>"
+    pattern3= r"<a[^>]+href=[\"\']([^\"\']+)[\"\'][^>]*>"
 
     file = open("dirs_dictionary.bat")
     content = file.read()
     test_dirs_files = content.splitlines()
 
-    #Cleaning the string by removing everything not alphanumerical such as white spaces and special characters
-    test_dirs_files= [re.sub(r'[^A-Za-z0-9.-_]', '', d) for d in test_dirs_files]
+    #Cleaning the string by removing white spaces and the points at the beginning of the dir or file as well as the slashes
+    test_dirs_files= [re.sub(r'^(\/|\.)|\/$', '', d) for d in test_dirs_files]
+    test_dirs_files= [re.sub(r'\s+', '', d) for d in test_dirs_files]
 
     valid_dirs_files=[]
     valid_links=[]
@@ -93,19 +97,21 @@ def directories_files(url):
             req=requests.get(test_url)
             #If valid, add the directory or file to the valid ones
             if req.status_code >= 200 and req.status_code <= 299:
-                valid_dirs_files.append(test_url)
+                valid_dirs_files.append(test)
                 print("Found. ", test_url)
                 #Get the HTML code of the URL
                 html_content=req.text 
                 #Find all the links inside the HTML code
                 test_links=re.findall(pattern3, html_content)
-                #Loop to test all the links inside the HTML code
+                    #Loop to test all the links inside the HTML code
                 for l in test_links:
                     if l.startswith("http"):
-                        req= requests.get(l)
+                        req2= requests.get(l)
                         #If the link is valid, add it to the valid links array
-                        if req.status_code>=200 and req.status_code<=299:
+                        if req2.status_code>=200 and req2.status_code<=299:
                             valid_links.append(l)
+            else:
+                print("Not found. ", test_url)
         except Exception as e:
             print("Not found. ", test_url)
 
@@ -118,7 +124,7 @@ def directories_files(url):
         f.write("\n".join(valid_links))
         
     file.close()
-    
+
 #Links in the HTML code of the given URL
 def find_links(url):
 
@@ -127,7 +133,7 @@ def find_links(url):
     html_content = req.text
 
     #pattern is a regex to find the links inside the HTML code
-    pattern = r"<a[^>]+href=[\"|\']([^\"\']+)[\"|\'][^>]*>"
+    pattern = r"<a[^>]+href=[\"\']([^\"\']+)[\"\'][^>]*>"
     href_links = re.findall(pattern, html_content)
 
     valid_href_links=[]
@@ -158,9 +164,9 @@ def main():
     try:
         req = requests.get(url)
         if req.status_code >= 200 and req.status_code <= 299:
-            #subdomains(url)
+            subdomains(url)
             directories_files(url)
-            #find_links(url)
+            find_links(url)
         else:
             print("Invalid link!")
     except Exception as e:
