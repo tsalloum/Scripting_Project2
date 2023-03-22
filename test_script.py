@@ -35,3 +35,22 @@ def subdomains(url):
         else:
             #If the domain does not start with www.
             test_url = f"{protocol}://{subdomain}.{domain}"
+        try:
+            #Perform an HTTP GET request to the URL
+            req= requests.get(test_url)
+            #Add the subdomain to the valid subdomains
+            valid_subdomains.append(subdomain)
+            print("Subdomain found.", test_url)
+            #Get the HTML file of the valid URL
+            html_content=req.text 
+            #Find all the links inside the HTML
+            test_links=re.findall(pattern3, html_content)
+            #Loop to test all the links inside the HTML file
+            for l in test_links:
+                if l.startswith("http"):
+                    req= requests.get(l)
+                    if req.status_code>=200 and req.status_code<=299:
+                        #If the link is valid add it to the valid links array
+                        valid_links.append(l)
+        except Exception as e:
+            print("Subdomain not found.", test_url)
