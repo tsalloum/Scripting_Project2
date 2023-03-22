@@ -47,3 +47,5 @@ This function that takes a URL as input and finds all the valid links present on
 def main():
 ```
 This function is the main function of a program and it is responsible for processing a user-provided URL. The function starts by checking if the user has provided a URL as a command line argument when executing the program. If no argument was provided, the function will print a message indicating that no link was provided and exit the program with an error code of 1. If a valid URL was provided, the function will attempt to send an HTTP GET request to the URL using the requests library. If the status code of the response is in the 200-299 range, the program will proceed to call three other functions: subdomains(), directories_files(), and find_links(). If the status code of the response is not in the 200-299 range, the program will print an error message indicating that the link is invalid. Finally, the function includes a try-except block that catches any exceptions that may occur during the execution of the program and prints an error message.
+
+## Challenges
