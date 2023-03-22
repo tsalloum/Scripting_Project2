@@ -132,3 +132,18 @@ def find_links(url):
     href_links = re.findall(pattern, html_content)
 
     valid_href_links=[]
+
+    #Looping to check all the links
+    for l in href_links:
+        #If it is a link
+        if l.startswith("http"):
+            #Perform an HTTP GET request to the URL
+            req= requests.get(l)
+            #If the link is valid add it to the valid links array
+            if req.status_code>=200 and req.status_code<=299:
+                valid_href_links.append(l)
+                print("Link found. ", l)
+
+    #Write the valid links to the output file
+    with open("href_links.bat", "w") as file:
+        file.write("\n".join(valid_href_links))
