@@ -119,3 +119,16 @@ def directories_files(url):
         f.write("\n".join(valid_links))
         
     file.close()
+
+#Links in the HTML code of the given URL
+def find_links(url):
+
+    req=requests.get(url)
+    #Get the HTML code of the page
+    html_content = req.text
+
+    #pattern is a regex to find the links inside the HTML code
+    pattern = r"<a[^>]+href=[\"|\']([^\"\']+)[\"|\'][^>]*>"
+    href_links = re.findall(pattern, html_content)
+
+    valid_href_links=[]
