@@ -12,3 +12,10 @@ the concatination of the subdomain and the domain. A "get" request will be sent 
 The URLs to be checked are the concatination of the input URL and the directory or file name. Also a "get" request will be sent to each URL to check its validity. Valid directories and files will be written to an output file.
 * The HTML code of the URL, valid subdomains, directories and files will be  extracted and scanned to retreive all hidden links found in thehref attribute of the tags, that could potentially lead to pages with vulnerabilities. A "get" request will be sent to each link found to check its availability. Valid links will be written to output file.
 * The script will log all discovered subdomains, directories, and files in a structured format and provide an output that can be easily interpreted by the user. The user can then use this information to identify potential vulnerabilities and strengthen the website's security posture.
+
+## Execution
+--------------------------------------------
+This script can be executed by running on the terminal the following command:
+
+Use the targeted website's URL instead of "https://domain.com"
+The input text files used in this script are "subdomains_dictionary.bat" for subdomains and "dirs_dictionary.bat" for both directories and files. 
