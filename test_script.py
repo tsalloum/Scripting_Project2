@@ -147,3 +147,23 @@ def find_links(url):
     #Write the valid links to the output file
     with open("href_links.bat", "w") as file:
         file.write("\n".join(valid_href_links))
+
+def main():
+    if len(sys.argv) < 2:
+        print("No link was provided")
+        sys.exit(1)
+    url=sys.argv[1]
+
+    try:
+        req = requests.get(url)
+        if req.status_code >= 200 and req.status_code <= 299:
+            subdomains(url)
+            directories_files(url)
+            find_links(url)
+        else:
+            print("Invalid link!")
+    except Exception as e:
+        print("An error occurred: ", e)
+
+if __name__ == '__main__':
+    main()
