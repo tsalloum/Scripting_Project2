@@ -40,3 +40,10 @@ This function takes a URL as an input and tries to find directories, files, and 
 ```
 def find_links(url):
 ```
+This function that takes a URL as input and finds all the valid links present on the webpage associated with the given URL. First, it uses the 'requests' library to send an HTTP GET request to the given URL and retrieve the HTML content of the webpage. It then searches for all the anchor tag elements containing 'href' attribute in the HTML code using a regular expression. After that, it filters out the invalid links and checks the validity of each link by sending an HTTP GET request to it. If the link is valid (HTTP status code between 200 and 299), it is added to the list of valid links. Finally, the function writes the list of valid links to an output file.
+
+-----------------------------------------------------------------------
+```
+def main():
+```
+This function is the main function of a program and it is responsible for processing a user-provided URL. The function starts by checking if the user has provided a URL as a command line argument when executing the program. If no argument was provided, the function will print a message indicating that no link was provided and exit the program with an error code of 1. If a valid URL was provided, the function will attempt to send an HTTP GET request to the URL using the requests library. If the status code of the response is in the 200-299 range, the program will proceed to call three other functions: subdomains(), directories_files(), and find_links(). If the status code of the response is not in the 200-299 range, the program will print an error message indicating that the link is invalid. Finally, the function includes a try-except block that catches any exceptions that may occur during the execution of the program and prints an error message.
