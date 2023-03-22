@@ -29,3 +29,14 @@ This script includes 4 methods involved in checking the URLs, subdomains, direct
 def subdomains(url):
 ```
 Function that takes a URL as input and attempts to discover subdomains and valid links associated with the given URL. The method uses a combination of regular expressions and HTTP requests to achieve its purpose. The method then iterates through the possible subdomains and constructs a new URL by concatenating the original domain name with the subdomain being tested. The method sends an HTTP GET request to the new URL and checks if the request is successful. If it is, the method adds the subdomain to the list of valid subdomains and prints a message indicating that the subdomain was found. The method also extracts all the links present in the HTML code of the valid URL and checks if they are valid links by sending HTTP GET requests to each link. If the link is valid, it is added to the list of valid links. And finally the retreived valid href links and subdomains are written to output files.
+
+---------------------------------------------------------------------
+```
+def directories_files(url):
+```
+This function takes a URL as an input and tries to find directories, files, and links that are associated with the provided URL. It employs regular expressions and HTTP requests to perform its task. The function then goes through the possible files and directories names and forms a new URL by combining the original domain name with the directory or file name obtained from the input file. It sends an HTTP GET request to the newly formed URL and verifies if the request was successful. If it is, the function adds the directory or file to the list of valid directories and files. The function also extracts all the links present in the HTML code of the valid URLs and confirms their validity by sending HTTP GET requests to each of them. If the link is valid, it is appended to the list of valid links. Finally, the retrieved valid href links, directories, and files are saved in output files.
+
+----------------------------------------------------------------------
+```
+def find_links(url):
+```
