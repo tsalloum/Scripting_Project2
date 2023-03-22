@@ -54,3 +54,13 @@ def subdomains(url):
                         valid_links.append(l)
         except Exception as e:
             print("Subdomain not found.", test_url)
+
+    #Write the valid subdomains to the output file
+    with open("subdomains_output.bat", "w") as f:
+        f.write("\n".join(valid_subdomains))
+
+    #Write the valid links to the output file
+    with open("links_output.bat", "w") as f:
+        f.write("\n".join(valid_links))
+                
+    file.close()
