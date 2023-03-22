@@ -22,3 +22,10 @@ python test_script.py https://domain.com
 Use the targeted website's URL instead of "https://domain.com".   
 
 The input text files used in this script are "subdomains_dictionary.bat" for subdomains and "dirs_dictionary.bat" for both directories and files. 
+
+## Steps
+This script includes 4 methods involved in checking the URLs, subdomains, directories and files.
+```
+def subdomains(url):
+```
+Function that takes a URL as input and attempts to discover subdomains and valid links associated with the given URL. The method uses a combination of regular expressions and HTTP requests to achieve its purpose. The method then iterates through the possible subdomains and constructs a new URL by concatenating the original domain name with the subdomain being tested. The method sends an HTTP GET request to the new URL and checks if the request is successful. If it is, the method adds the subdomain to the list of valid subdomains and prints a message indicating that the subdomain was found. The method also extracts all the links present in the HTML code of the valid URL and checks if they are valid links by sending HTTP GET requests to each link. If the link is valid, it is added to the list of valid links. And finally the retreived valid href links and subdomains are written to output files.
