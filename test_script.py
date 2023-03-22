@@ -86,3 +86,26 @@ def directories_files(url):
 
     valid_dirs_files=[]
     valid_links=[]
+
+    #Looping until all directories and files are checked
+    for test in test_dirs_files:
+        test_url = f"{url}/{test}"
+        try:
+            #Perform an HTTP GET request to the URL
+            req=requests.get(test_url)
+            #Add the directory or file to the valid ones
+            valid_dirs_files.append(test_url)
+            print("Found.", test_url)
+            #Get the HTML file of the URL
+            html_content=req.text 
+            #Find all the links inside the HTML
+            test_links=re.findall(pattern3, html_content)
+            #Loop to test all the links inside the HTML file
+            for l in test_links:
+                if link.startswith("http"):
+                    req= requests.get(l)
+                    #If the link is valid add it to the valid links array
+                    if req.status_code>=200 and req.status_code<=299:
+                        valid_links.append(l)
+        except Exception as e:
+            print("Not found.", test_url)
