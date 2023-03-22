@@ -64,3 +64,25 @@ def subdomains(url):
         f.write("\n".join(valid_links))
                 
     file.close()
+
+#DIRECTORIES & FILES
+def directories_files(url):
+
+    #pattern1 is a regex to find the domain of the URL
+    pattern1 = r"^https?\:\/\/([A-Za-z0-9\-]+(?:\.[a-zA-Z]{2,}){1,})$"
+    #pattern2 is a regex to find the protocol of the URL
+    pattern2 = r"https?"
+    #pattern3 is a regex to find the links inside the html file
+    pattern3= r"<a[^>]+href=[\"|\']([^\"\']+)[\"|\'][^>]*>"
+    domain = re.findall(pattern1, url)[0]
+    protocol = re.findall(pattern2, url)[0]
+
+    file = open("dirs_dictionary.bat")
+    content = file.read()
+    test_dirs_files = content.splitlines()
+
+    #Cleaning the string by removing everything not alphanumerical such as white spaces and special characters
+    test_dirs_files= [re.sub(r'[^A-Za-z0-9.-_]', '', d) for d in test_dirs_files]
+
+    valid_dirs_files=[]
+    valid_links=[]
