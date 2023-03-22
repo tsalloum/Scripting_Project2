@@ -10,12 +10,12 @@ def subdomains(url):
     pattern1 = r"^https?\:\/\/([A-Za-z0-9\-]+(?:\.[a-zA-Z]{2,}){1,})$"
     #pattern2 is a regex to find the protocol of the URL
     pattern2 = r"https?"
-    #pattern3 is a regex to find the links inside the html file
+    #pattern3 is a regex to find the links inside the HTML code
     pattern3= r"<a[^>]+href=[\"|\']([^\"\']+)[\"|\'][^>]*>"
     domain = re.findall(pattern1, url)[0]
     protocol = re.findall(pattern2, url)[0]
 
-    #Reading from the subdomains_dictionary.bat text file the subdomains to test
+    #Reading from the subdomains_dictionary.bat the subdomains to test
     file = open("subdomains_dictionary.bat")
     content = file.read()
     test_subdomains = content.splitlines()
@@ -38,22 +38,25 @@ def subdomains(url):
         try:
             #Perform an HTTP GET request to the URL
             req= requests.get(test_url)
-            #Add the subdomain to the valid subdomains
-            valid_subdomains.append(subdomain)
-            print("Subdomain found.", test_url)
-            #Get the HTML file of the valid URL
-            html_content=req.text 
-            #Find all the links inside the HTML
-            test_links=re.findall(pattern3, html_content)
-            #Loop to test all the links inside the HTML file
-            for l in test_links:
-                if l.startswith("http"):
-                    req= requests.get(l)
-                    if req.status_code>=200 and req.status_code<=299:
-                        #If the link is valid add it to the valid links array
-                        valid_links.append(l)
+            if req.status_code >= 200 and req.status_code <= 299:
+                #If valid, add the subdomain to the valid subdomains
+                valid_subdomains.append(subdomain)
+                print("Subdomain found. ", test_url)
+                #Get the HTML file of the valid URL
+                html_content=req.text 
+                #Find all the links inside the HTML code
+                test_links=re.findall(pattern3, html_content)
+                #Loop to test all the links inside the HTML code
+                for l in test_links:
+                    if l.startswith("http"):
+                        req= requests.get(l)
+                        if req.status_code>=200 and req.status_code<=299:
+                            #If the link is valid add it to the valid links array
+                            valid_links.append(l)
+            else:
+                print("Not found. ", test_url)
         except Exception as e:
-            print("Subdomain not found.", test_url)
+            print("Error")
 
     #Write the valid subdomains to the output file
     with open("subdomains_output.bat", "w") as f:
@@ -93,22 +96,25 @@ def directories_files(url):
         try:
             #Perform an HTTP GET request to the URL
             req=requests.get(test_url)
-            #Add the directory or file to the valid ones
-            valid_dirs_files.append(test_url)
-            print("Found.", test_url)
-            #Get the HTML file of the URL
-            html_content=req.text 
-            #Find all the links inside the HTML
-            test_links=re.findall(pattern3, html_content)
-            #Loop to test all the links inside the HTML file
-            for l in test_links:
-                if l.startswith("http"):
-                    req= requests.get(l)
-                    #If the link is valid add it to the valid links array
-                    if req.status_code>=200 and req.status_code<=299:
-                        valid_links.append(l)
+            if req.status_code >= 200 and req.status_code <= 299:
+                #Add the directory or file to the valid ones
+                valid_dirs_files.append(test_url)
+                print("Found. ", test_url)
+                #Get the HTML file of the URL
+                html_content=req.text 
+                #Find all the links inside the HTML
+                test_links=re.findall(pattern3, html_content)
+                #Loop to test all the links inside the HTML file
+                for l in test_links:
+                    if l.startswith("http"):
+                        req= requests.get(l)
+                        #If the link is valid add it to the valid links array
+                        if req.status_code>=200 and req.status_code<=299:
+                            valid_links.append(l)
+            else:
+                print("Not found.", test_url)
         except Exception as e:
-            print("Not found.", test_url)
+            print("Error")
 
     #Write the directories and files to the output file
     with open("dirs_files_output.bat", "w") as f:
