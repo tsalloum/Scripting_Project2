@@ -102,10 +102,20 @@ def directories_files(url):
             test_links=re.findall(pattern3, html_content)
             #Loop to test all the links inside the HTML file
             for l in test_links:
-                if link.startswith("http"):
+                if l.startswith("http"):
                     req= requests.get(l)
                     #If the link is valid add it to the valid links array
                     if req.status_code>=200 and req.status_code<=299:
                         valid_links.append(l)
         except Exception as e:
             print("Not found.", test_url)
+
+    #Write the directories and files to the output file
+    with open("dirs_files_output.bat", "w") as f:
+        f.write("\n".join(valid_dirs_files))
+
+    #Write the valid links to the output file
+    with open("links_output.bat", "w") as f:
+        f.write("\n".join(valid_links))
+        
+    file.close()
