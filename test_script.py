@@ -19,3 +19,19 @@ def subdomains(url):
     file = open("subdomains_dictionary.bat")
     content = file.read()
     test_subdomains = content.splitlines()
+
+    #Cleaning the string by removing everything not alphanumerical such as white spaces and special characters
+    test_subdomains= [re.sub(r'[^A-Za-z0-9.-_]', '', subdomain) for subdomain in test_subdomains]
+
+    valid_subdomains=[]
+    valid_links=[]
+
+    #Looping until all subdomains are checked
+    for subdomain in test_subdomains:
+        domain_start = url.split("//")[-1].split("/")[0]
+        if domain_start.startswith("www."):
+            #If the domain starts with www.
+            test_url = f"{protocol}://www.{subdomain}.{domain}"
+        else:
+            #If the domain does not start with www.
+            test_url = f"{protocol}://{subdomain}.{domain}"
